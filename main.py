@@ -155,16 +155,14 @@ def predictChemical():
     try:
         data_json_chemical = request.get_json()
 
-        if not data_json_chemical or not all(key in data_json_chemical for key in ['pH', 'Day', 'Month', 'Year']):
+        if not data_json_chemical or not all(key in data_json_chemical for key in ['pH']):
             return jsonify(error="Invalid JSON data"), 400
 
         pH = float(data_json_chemical['pH'])
-        Day = int(data_json_chemical['Day'])
-        Month = int(data_json_chemical['Month'])
-        Year = int(data_json_chemical['Year'])
+
 
         # Make a prediction using the loaded model
-        prediction = model_chemical.predict([[pH, Day, Month, Year]])
+        prediction = model_chemical.predict([[pH]])
 
         # Assuming the prediction is a single value, convert it to a JSON response
         chemical_prediction = prediction[0]
@@ -172,6 +170,7 @@ def predictChemical():
 
     except Exception as e:
         return jsonify(error=str(e)), 500
+
 
 
 @app.route('/predict/future/pH', methods=['POST'])
